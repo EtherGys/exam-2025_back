@@ -3,6 +3,8 @@ package com.chaussures.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,6 +32,7 @@ public class Carte {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "barmaker_id", nullable = false)
+    @JsonIgnore
     private Client barmaker;
 
     @ManyToMany

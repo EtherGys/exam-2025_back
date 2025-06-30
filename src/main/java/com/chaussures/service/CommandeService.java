@@ -53,6 +53,7 @@ public class CommandeService {
         Commande commande = new Commande();
         commande.setClient(client);
         commande.setDateHeureCommande(LocalDateTime.now());
+        commande.setDateCreation(LocalDateTime.now());
         commande.setStatutCommande(StatutCommande.COMMANDEE);
         List<LigneDeCommande> lignes = new ArrayList<>();
         for (LigneDeCommandeItem item : lignesDeCommandeItems) {

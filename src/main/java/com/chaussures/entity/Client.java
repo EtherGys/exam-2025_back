@@ -62,6 +62,7 @@ public class Client {
     private List<Commande> commandes;
     
     @OneToMany(mappedBy = "barmaker", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Carte> cartesPossedees;
     
     // Constructeurs

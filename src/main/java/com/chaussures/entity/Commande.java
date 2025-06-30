@@ -37,11 +37,15 @@ public class Commande {
     @Column(name = "date_heure_commande", nullable = false)
     private LocalDateTime dateHeureCommande;
     
+    @Column(name = "date_creation", nullable = false)
+    private LocalDateTime dateCreation;
+    
     @Enumerated(EnumType.STRING)
     @Column(name = "statut_commande", nullable = false)
     private StatutCommande statutCommande = StatutCommande.COMMANDEE;
     
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<LigneDeCommande> lignesDeCommande;
     
     // Constructeurs
@@ -50,6 +54,7 @@ public class Commande {
     public Commande(Client client, LocalDateTime dateHeureCommande, StatutCommande statutCommande, List<LigneDeCommande> lignesDeCommande) {
         this.client = client;
         this.dateHeureCommande = dateHeureCommande;
+        this.dateCreation = LocalDateTime.now();
         this.statutCommande = statutCommande;
         this.lignesDeCommande = lignesDeCommande;
     }
@@ -79,6 +84,14 @@ public class Commande {
         this.dateHeureCommande = dateHeureCommande;
     }
     
+    public LocalDateTime getDateCreation() {
+        return dateCreation;
+    }
+    
+    public void setDateCreation(LocalDateTime dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+    
     public StatutCommande getStatutCommande() {
         return statutCommande;
     }
@@ -101,6 +114,7 @@ public class Commande {
                 "id=" + id +
                 ", client=" + (client != null ? client.getId() : "null") +
                 ", dateHeureCommande=" + dateHeureCommande +
+                ", dateCreation=" + dateCreation +
                 ", statutCommande=" + statutCommande +
                 ", lignesDeCommande=" + (lignesDeCommande != null ? lignesDeCommande.size() : "null") +
                 '}';

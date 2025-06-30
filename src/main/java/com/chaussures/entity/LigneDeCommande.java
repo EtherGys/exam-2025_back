@@ -1,5 +1,7 @@
 package com.chaussures.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,10 +23,12 @@ public class LigneDeCommande {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commande_id", nullable = false)
+    @JsonIgnore
     private Commande commande;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cocktail_id", nullable = false)
+    @JsonIgnore
     private Cocktail cocktail;
 
     @Enumerated(EnumType.STRING)

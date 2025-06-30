@@ -5,11 +5,14 @@ import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
@@ -45,19 +48,21 @@ public class Cocktail {
     @Column(name = "prix_l", nullable = false)
     private Double prixL;
 
-    @NotBlank(message = "La catégorie du cocktail est obligatoire")
+    @NotEmpty(message = "Le cocktail doit avoir au moins une catégorie")
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
     @Column(name = "categorie", nullable = false)
-    private String categorie;
+    private List<CocktailCategorie> categories;
 
     public Cocktail() {}
 
-    public Cocktail(String nom, List<String> ingredients, Double prixS, Double prixM, Double prixL, String categorie) {
+    public Cocktail(String nom, List<String> ingredients, Double prixS, Double prixM, Double prixL, List<CocktailCategorie> categories) {
         this.nom = nom;
         this.ingredients = ingredients;
         this.prixS = prixS;
         this.prixM = prixM;
         this.prixL = prixL;
-        this.categorie = categorie;
+        this.categories = categories;
     }
 
     public Long getId() { return id; }
@@ -72,11 +77,11 @@ public class Cocktail {
     public void setPrixM(Double prixM) { this.prixM = prixM; }
     public Double getPrixL() { return prixL; }
     public void setPrixL(Double prixL) { this.prixL = prixL; }
-    public String getCategorie() {
-        return categorie;
+    public List<CocktailCategorie> getCategories() {
+        return categories;
     }
-    public void setCategorie(String categorie) {
-        this.categorie = categorie;
+    public void setCategories(List<CocktailCategorie> categories) {
+        this.categories = categories;
     }
 
     @Override
@@ -88,7 +93,7 @@ public class Cocktail {
                 ", prixS=" + prixS +
                 ", prixM=" + prixM +
                 ", prixL=" + prixL +
-                ", categorie='" + categorie + '\'' +
+                ", categories=" + categories +
                 '}';
     }
 } 
