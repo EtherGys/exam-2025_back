@@ -1,0 +1,8 @@
+{
+  "nom": "Test",
+  "prenom": "User",
+  "email": "test@example.com",
+  "motDePasse": "password123",
+  "adresse": "123 Test Street",
+  "role": "USER"
+} 
