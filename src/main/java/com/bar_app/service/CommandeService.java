@@ -17,6 +17,7 @@ import com.bar_app.entity.StatutCocktail;
 import com.bar_app.entity.StatutCommande;
 import com.bar_app.entity.Taille;
 import com.bar_app.repository.CommandeRepository;
+import com.bar_app.repository.LigneDeCommandeRepository;
 
 @Service
 public class CommandeService {
@@ -29,6 +30,9 @@ public class CommandeService {
     
     @Autowired
     private CocktailService cocktailService;
+    
+    @Autowired
+    private LigneDeCommandeRepository ligneDeCommandeRepository;
     
     /**
      * Récupère toutes les commandes
@@ -163,5 +167,12 @@ public class CommandeService {
         } else {
             commande.setStatutCommande(StatutCommande.COMMANDEE);
         }
+    }
+    
+    /**
+     * Récupère les lignes de commande non terminées associées à un barmaker
+     */
+    public List<LigneDeCommande> getLignesNonTermineesByBarmaker(Long barmakerId) {
+        return ligneDeCommandeRepository.findNonTermineesByBarmakerId(barmakerId);
     }
 } 

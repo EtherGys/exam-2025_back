@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bar_app.entity.Commande;
+import com.bar_app.entity.LigneDeCommande;
 import com.bar_app.service.CommandeService;
 
 @RestController
@@ -132,6 +133,15 @@ public class CommandeController {
     public ResponseEntity<Boolean> commandeExists(@PathVariable Long id) {
         boolean exists = commandeService.commandeExists(id);
         return ResponseEntity.ok(exists);
+    }
+    
+    /**
+     * GET /api/commandes/barmaker/{barmakerId} - Récupère les lignes de commande non terminées d'un barmaker
+     */
+    @GetMapping("/barmaker/{barmakerId}")
+    public ResponseEntity<List<LigneDeCommande>> getLignesNonTermineesByBarmaker(@PathVariable Long barmakerId) {
+        List<LigneDeCommande> lignes = commandeService.getLignesNonTermineesByBarmaker(barmakerId);
+        return ResponseEntity.ok(lignes);
     }
     
     // Classe interne pour les requêtes de commande
