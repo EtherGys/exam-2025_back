@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
-import com.bar_app.service.PasswordService;
-
 class PasswordServiceTest {
     private final PasswordService passwordService = new PasswordService();
 
@@ -22,5 +20,10 @@ class PasswordServiceTest {
         String encoded = passwordService.encodePassword("pw");
         assertTrue(passwordService.isEncoded(encoded));
         assertFalse(passwordService.isEncoded("notencoded"));
+    }
+
+    @Test
+    void isEncoded_nullPassword() {
+        assertFalse(passwordService.isEncoded(null));
     }
 } 

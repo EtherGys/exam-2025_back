@@ -169,4 +169,22 @@ class ClientServiceTest {
         AuthResponse response = clientService.authenticateClient("a@b.com", "pw");
         assertEquals("Email ou mot de passe incorrect", response.getMessage());
     }
+
+    @Test
+    void authenticateClientOld_success() {
+        Client client = new Client();
+        client.setEmail("a@b.com");
+        client.setMotDePasse("encoded");
+        when(clientRepository.findByEmail("a@b.com")).thenReturn(Optional.of(client));
+        when(passwordService.matches("pw", "encoded")).thenReturn(true);
+        Optional<Client> result = clientService.authenticateClientOld("a@b.com", "pw");
+        assertTrue(result.isPresent());
+    }
+
+    @Test
+    void authenticateClientOld_failure() {
+        when(clientRepository.findByEmail("a@b.com")).thenReturn(Optional.empty());
+        Optional<Client> result = clientService.authenticateClientOld("a@b.com", "pw");
+        assertTrue(result.isEmpty());
+    }
 } 
