@@ -54,34 +54,97 @@ public class Cocktail {
     @Column(name = "categorie", nullable = false)
     private List<CocktailCategorie> categories;
 
-    public Cocktail() {}
+    @Column(name = "image")
+    private String image;
 
-    public Cocktail(String nom, List<String> ingredients, Double prixS, Double prixM, Double prixL, List<CocktailCategorie> categories) {
+    @Column(name = "description")
+    private String description;
+
+    public Cocktail() {
+    }
+
+    public Cocktail(String nom, List<String> ingredients, Double prixS, Double prixM, Double prixL,
+            List<CocktailCategorie> categories, String image, String description) {
         this.nom = nom;
         this.ingredients = ingredients;
         this.prixS = prixS;
         this.prixM = prixM;
         this.prixL = prixL;
         this.categories = categories;
+        this.image = image;
+        this.description = description;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getNom() { return nom; }
-    public void setNom(String nom) { this.nom = nom; }
-    public List<String> getIngredients() { return ingredients; }
-    public void setIngredients(List<String> ingredients) { this.ingredients = ingredients; }
-    public Double getPrixS() { return prixS; }
-    public void setPrixS(Double prixS) { this.prixS = prixS; }
-    public Double getPrixM() { return prixM; }
-    public void setPrixM(Double prixM) { this.prixM = prixM; }
-    public Double getPrixL() { return prixL; }
-    public void setPrixL(Double prixL) { this.prixL = prixL; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public List<String> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<String> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public Double getPrixS() {
+        return prixS;
+    }
+
+    public void setPrixS(Double prixS) {
+        this.prixS = prixS;
+    }
+
+    public Double getPrixM() {
+        return prixM;
+    }
+
+    public void setPrixM(Double prixM) {
+        this.prixM = prixM;
+    }
+
+    public Double getPrixL() {
+        return prixL;
+    }
+
+    public void setPrixL(Double prixL) {
+        this.prixL = prixL;
+    }
+
     public List<CocktailCategorie> getCategories() {
         return categories;
     }
+
     public void setCategories(List<CocktailCategorie> categories) {
         this.categories = categories;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -89,11 +152,13 @@ public class Cocktail {
         return "Cocktail{" +
                 "id=" + id +
                 ", nom='" + nom + '\'' +
+                ", description='" + description + '\'' +
                 ", ingredients=" + ingredients +
                 ", prixS=" + prixS +
                 ", prixM=" + prixM +
                 ", prixL=" + prixL +
                 ", categories=" + categories +
+                ", image='" + image + '\'' +
                 '}';
     }
-} 
+}

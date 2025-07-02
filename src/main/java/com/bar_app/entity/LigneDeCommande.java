@@ -45,9 +45,11 @@ public class LigneDeCommande {
     @Column(name = "statut_cocktail", nullable = false)
     private StatutCocktail statutCocktail = StatutCocktail.COMMANDE;
 
-    public LigneDeCommande() {}
+    public LigneDeCommande() {
+    }
 
-    public LigneDeCommande(Commande commande, Cocktail cocktail, Taille taille, Double prixTaille, Integer quantite, StatutCocktail statutCocktail) {
+    public LigneDeCommande(Commande commande, Cocktail cocktail, Taille taille, Double prixTaille, Integer quantite,
+            StatutCocktail statutCocktail) {
         this.commande = commande;
         this.cocktail = cocktail;
         this.taille = taille;
@@ -56,20 +58,61 @@ public class LigneDeCommande {
         this.statutCocktail = statutCocktail;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public Commande getCommande() { return commande; }
-    public void setCommande(Commande commande) { this.commande = commande; }
-    public Cocktail getCocktail() { return cocktail; }
-    public void setCocktail(Cocktail cocktail) { this.cocktail = cocktail; }
-    public Taille getTaille() { return taille; }
-    public void setTaille(Taille taille) { this.taille = taille; }
-    public Double getPrixTaille() { return prixTaille; }
-    public void setPrixTaille(Double prixTaille) { this.prixTaille = prixTaille; }
-    public Integer getQuantite() { return quantite; }
-    public void setQuantite(Integer quantite) { this.quantite = quantite; }
-    public StatutCocktail getStatutCocktail() { return statutCocktail; }
-    public void setStatutCocktail(StatutCocktail statutCocktail) { this.statutCocktail = statutCocktail; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Commande getCommande() {
+        return commande;
+    }
+
+    public void setCommande(Commande commande) {
+        this.commande = commande;
+    }
+
+    public Cocktail getCocktail() {
+        return cocktail;
+    }
+
+    public void setCocktail(Cocktail cocktail) {
+        this.cocktail = cocktail;
+    }
+
+    public Taille getTaille() {
+        return taille;
+    }
+
+    public void setTaille(Taille taille) {
+        this.taille = taille;
+    }
+
+    public Double getPrixTaille() {
+        return prixTaille;
+    }
+
+    public void setPrixTaille(Double prixTaille) {
+        this.prixTaille = prixTaille;
+    }
+
+    public Integer getQuantite() {
+        return quantite;
+    }
+
+    public void setQuantite(Integer quantite) {
+        this.quantite = quantite;
+    }
+
+    public StatutCocktail getStatutCocktail() {
+        return statutCocktail;
+    }
+
+    public void setStatutCocktail(StatutCocktail statutCocktail) {
+        this.statutCocktail = statutCocktail;
+    }
 
     @Override
     public String toString() {
@@ -83,4 +126,4 @@ public class LigneDeCommande {
                 ", statutCocktail=" + statutCocktail +
                 '}';
     }
-} 
+}

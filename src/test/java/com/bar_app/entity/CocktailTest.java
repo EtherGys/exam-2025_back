@@ -16,7 +16,7 @@ public class CocktailTest {
     public void testCreationCocktailAvecCategoriesMultiples() {
         List<String> ingredients = Arrays.asList("Rhum blanc", "Menthe", "Citron vert");
         List<CocktailCategorie> categories = Arrays.asList(CocktailCategorie.CLASSIQUE, CocktailCategorie.RAFRAICHISSANT);
-        Cocktail cocktail = new Cocktail("Mojito", ingredients, 6.0, 8.0, 10.0, categories);
+        Cocktail cocktail = new Cocktail("Mojito", ingredients, 6.0, 8.0, 10.0, categories, null, null);
 
         Assertions.assertEquals("Mojito", cocktail.getNom());
         Assertions.assertEquals(3, cocktail.getIngredients().size());

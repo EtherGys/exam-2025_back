@@ -11,19 +11,25 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtAuthenticationInterceptor implements HandlerInterceptor {
-    
+
     @Autowired
     private JwtService jwtService;
-    
+
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
+        // Laisser passer toutes les requêtes OPTIONS (CORS preflight)
+        if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {
+            return true;
+        }
+
         // Exclure les endpoints publics de l'authentification
         String requestURI = request.getRequestURI();
         String method = request.getMethod();
         if (isPublicEndpoint(requestURI)) {
             return true;
         }
-        
+
         // Récupérer le token depuis le header Authorization
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
@@ -32,18 +38,19 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             response.getWriter().write("{\"error\":\"Token manquant\"}");
             return false;
         }
-        
+
         String token = authHeader.substring(7); // Enlever "Bearer "
-        
+
         try {
             // Valider le token
             String email = jwtService.extractEmail(token);
             Long userId = jwtService.extractUserId(token);
             String role = jwtService.extractUserRole(token);
-            
+
             if (jwtService.validateToken(token, email)) {
                 // Vérification du rôle Barmaker pour les endpoints sensibles
-                if (requestURI.startsWith("/api/cartes") && ("POST".equalsIgnoreCase(method) || "DELETE".equalsIgnoreCase(method))) {
+                if (requestURI.startsWith("/api/cartes")
+                        && ("POST".equalsIgnoreCase(method) || "DELETE".equalsIgnoreCase(method))) {
                     if (!"BARMaker".equalsIgnoreCase(role)) {
                         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                         response.setContentType("application/json");
@@ -71,17 +78,16 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
             return false;
         }
     }
-    
+
     /**
      * Définit les endpoints publics qui ne nécessitent pas d'authentification
      */
     private boolean isPublicEndpoint(String requestURI) {
         return requestURI.startsWith("/api/clients/login") ||
-               requestURI.startsWith("/api/clients/validate-token") ||
-               requestURI.startsWith("/api/test") ||
-               requestURI.startsWith("/health") ||
-               requestURI.startsWith("/info") ||
-               requestURI.equals("/") ||
-               (requestURI.startsWith("/api/clients") && requestURI.matches(".*/\\d+$")); // GET /api/clients/{id}
+                requestURI.startsWith("/api/clients/validate-token") ||
+                requestURI.startsWith("/api/test") ||
+                requestURI.startsWith("/health") ||
+                requestURI.startsWith("/info") ||
+                (requestURI.startsWith("/api/clients") && requestURI.matches(".*/\\d+$")); // GET /api/clients/{id}
     }
-} 
+}

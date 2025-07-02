@@ -36,22 +36,18 @@ public class CarteService {
         return carteRepository.findByBarmakerId(barmakerId);
     }
 
-    public Carte createCarte(String nom, Long barmakerId, List<Long> cocktailIds) {
+    public Carte createCarte(String nom, String description, String image, Long barmakerId, List<Long> cocktailIds) {
         // Vérifier si le barmaker existe
         Client barmaker = clientRepository.findById(barmakerId)
                 .orElseThrow(() -> new RuntimeException("Barmaker non trouvé"));
-        
+
         // Vérifier si une carte avec le même nom existe déjà pour ce barmaker
         if (carteRepository.existsByNomAndBarmakerId(nom, barmakerId)) {
             throw new CarteAlreadyExistsException(nom, barmakerId);
         }
-        
+
         List<Cocktail> cocktails = cocktailRepository.findAllById(cocktailIds);
-        Carte carte = new Carte();
-        carte.setNom(nom);
-        carte.setDateCreation(LocalDateTime.now());
-        carte.setBarmaker(barmaker);
-        carte.setCocktails(cocktails);
+        Carte carte = new Carte(nom, description, image, LocalDateTime.now(), barmaker, cocktails);
         return carteRepository.save(carte);
     }
 
@@ -62,16 +58,16 @@ public class CarteService {
     public Carte updateCarte(Long id, String nom, List<Long> cocktailIds) {
         Carte carte = carteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Carte non trouvée"));
-        
+
         // Vérifier si le nouveau nom n'est pas déjà utilisé par le même barmaker
-        if (!nom.equals(carte.getNom()) && 
-            carteRepository.existsByNomAndBarmakerId(nom, carte.getBarmaker().getId())) {
+        if (!nom.equals(carte.getNom()) &&
+                carteRepository.existsByNomAndBarmakerId(nom, carte.getBarmaker().getId())) {
             throw new CarteAlreadyExistsException(nom, carte.getBarmaker().getId());
         }
-        
+
         List<Cocktail> cocktails = cocktailRepository.findAllById(cocktailIds);
         carte.setNom(nom);
         carte.setCocktails(cocktails);
         return carteRepository.save(carte);
     }
-} 
+}

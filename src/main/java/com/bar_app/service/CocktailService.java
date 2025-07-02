@@ -42,11 +42,13 @@ public class CocktailService {
         Cocktail cocktail = cocktailRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cocktail non trouvé avec l'ID: " + id));
         cocktail.setNom(cocktailDetails.getNom());
+        cocktail.setDescription(cocktailDetails.getDescription());
         cocktail.setIngredients(cocktailDetails.getIngredients());
         cocktail.setPrixS(cocktailDetails.getPrixS());
         cocktail.setPrixM(cocktailDetails.getPrixM());
         cocktail.setPrixL(cocktailDetails.getPrixL());
         cocktail.setCategories(cocktailDetails.getCategories());
+        cocktail.setImage(cocktailDetails.getImage());
         return cocktailRepository.save(cocktail);
     }
 
@@ -72,4 +74,4 @@ public class CocktailService {
     public boolean cocktailExists(Long id) {
         return cocktailRepository.existsById(id);
     }
-} 
+}

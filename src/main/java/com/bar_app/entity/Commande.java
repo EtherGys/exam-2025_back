@@ -34,9 +34,6 @@ public class Commande {
     @JsonIgnore
     private Client client;
     
-    @Column(name = "date_heure_commande", nullable = false)
-    private LocalDateTime dateHeureCommande;
-    
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime dateCreation;
     
@@ -51,9 +48,8 @@ public class Commande {
     // Constructeurs
     public Commande() {}
     
-    public Commande(Client client, LocalDateTime dateHeureCommande, StatutCommande statutCommande, List<LigneDeCommande> lignesDeCommande) {
+    public Commande(Client client, StatutCommande statutCommande, List<LigneDeCommande> lignesDeCommande) {
         this.client = client;
-        this.dateHeureCommande = dateHeureCommande;
         this.dateCreation = LocalDateTime.now();
         this.statutCommande = statutCommande;
         this.lignesDeCommande = lignesDeCommande;
@@ -74,14 +70,6 @@ public class Commande {
     
     public void setClient(Client client) {
         this.client = client;
-    }
-    
-    public LocalDateTime getDateHeureCommande() {
-        return dateHeureCommande;
-    }
-    
-    public void setDateHeureCommande(LocalDateTime dateHeureCommande) {
-        this.dateHeureCommande = dateHeureCommande;
     }
     
     public LocalDateTime getDateCreation() {
@@ -113,7 +101,6 @@ public class Commande {
         return "Commande{" +
                 "id=" + id +
                 ", client=" + (client != null ? client.getId() : "null") +
-                ", dateHeureCommande=" + dateHeureCommande +
                 ", dateCreation=" + dateCreation +
                 ", statutCommande=" + statutCommande +
                 ", lignesDeCommande=" + (lignesDeCommande != null ? lignesDeCommande.size() : "null") +

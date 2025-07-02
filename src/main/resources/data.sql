@@ -47,4 +47,7 @@ INSERT INTO commandes (client_id, produit_id, pointure_choisie, date_commande) V
 (4, 4, 41, '2024-01-24 15:45:00'),
 (4, 23, 41, '2024-01-30 10:20:00'),
 (5, 2, 39, '2024-01-26 12:00:00'),
-(5, 9, 41, '2024-02-01 17:30:00'); 
+(5, 9, 41, '2024-02-01 17:30:00');
+
+-- Exemple d'insertion avec image
+-- INSERT INTO cocktails (nom, ingredient, prix_s, prix_m, prix_l, categorie, image) VALUES ('Mojito', 'Rhum, Menthe, Sucre, Citron, Eau gazeuse', 5.0, 7.0, 9.0, 'CLASSIC', 'https://exemple.com/mojito.jpg'); 

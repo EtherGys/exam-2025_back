@@ -19,7 +19,7 @@ public class CarteTest {
         Client barmaker = new Client("Martin", "Sophie", "sophie@email.com", "pass123", "1 rue de Paris", Role.BARMAKER);
         List<Cocktail> cocktails = Collections.emptyList();
         LocalDateTime now = LocalDateTime.now();
-        Carte carte = new Carte("Carte Été", now, barmaker, cocktails);
+        Carte carte = new Carte("Carte Été",null, null, now, barmaker, cocktails);
         Assertions.assertEquals("Carte Été", carte.getNom());
         Assertions.assertEquals(now, carte.getDateCreation());
         Assertions.assertEquals(barmaker, carte.getBarmaker());

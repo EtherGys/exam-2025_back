@@ -24,13 +24,13 @@ public interface CommandeRepository extends JpaRepository<Commande, Long> {
     @Query("SELECT DISTINCT c FROM Commande c JOIN c.lignesDeCommande ldc WHERE ldc.cocktail.id = :cocktailId")
     List<Commande> findByCocktailId(@Param("cocktailId") Long cocktailId);
     
-    /**
-     * Trouve des commandes dans une période donnée
-     */
-    List<Commande> findByDateHeureCommandeBetween(LocalDateTime dateDebut, LocalDateTime dateFin);
+    // /**
+    //  * Trouve des commandes dans une période donnée
+    //  */
+    // List<Commande> findByDateHeureCommandeBetween(LocalDateTime dateDebut, LocalDateTime dateFin);
     
-    /**
-     * Trouve des commandes d'un client dans une période donnée
-     */
-    List<Commande> findByClientIdAndDateHeureCommandeBetween(Long clientId, LocalDateTime dateDebut, LocalDateTime dateFin);
+    // /**
+    //  * Trouve des commandes d'un client dans une période donnée
+    //  */
+    // List<Commande> findByClientIdAndDateHeureCommandeBetween(Long clientId, LocalDateTime dateDebut, LocalDateTime dateFin);
 } 

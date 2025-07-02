@@ -56,7 +56,6 @@ public class CommandeService {
                 .orElseThrow(() -> new RuntimeException("Client non trouvé avec l'ID: " + clientId));
         Commande commande = new Commande();
         commande.setClient(client);
-        commande.setDateHeureCommande(LocalDateTime.now());
         commande.setDateCreation(LocalDateTime.now());
         commande.setStatutCommande(StatutCommande.COMMANDEE);
         List<LigneDeCommande> lignes = new ArrayList<>();
@@ -137,19 +136,7 @@ public class CommandeService {
         return commandeRepository.findByCocktailId(cocktailId);
     }
     
-    /**
-     * Récupère des commandes dans une période donnée
-     */
-    public List<Commande> getCommandesByDateRange(LocalDateTime dateDebut, LocalDateTime dateFin) {
-        return commandeRepository.findByDateHeureCommandeBetween(dateDebut, dateFin);
-    }
     
-    /**
-     * Récupère des commandes d'un client dans une période donnée
-     */
-    public List<Commande> getCommandesByClientAndDateRange(Long clientId, LocalDateTime dateDebut, LocalDateTime dateFin) {
-        return commandeRepository.findByClientIdAndDateHeureCommandeBetween(clientId, dateDebut, dateFin);
-    }
     
     /**
      * Vérifie si une commande existe par son ID

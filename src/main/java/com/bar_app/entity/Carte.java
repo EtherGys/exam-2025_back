@@ -27,6 +27,12 @@ public class Carte {
     @Column(nullable = false)
     private String nom;
 
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "image")
+    private String image;
+
     @Column(name = "date_creation", nullable = false)
     private LocalDateTime dateCreation;
 
@@ -36,30 +42,75 @@ public class Carte {
     private Client barmaker;
 
     @ManyToMany
-    @JoinTable(
-        name = "carte_cocktails",
-        joinColumns = @JoinColumn(name = "carte_id"),
-        inverseJoinColumns = @JoinColumn(name = "cocktail_id")
-    )
+    @JoinTable(name = "carte_cocktails", joinColumns = @JoinColumn(name = "carte_id"), inverseJoinColumns = @JoinColumn(name = "cocktail_id"))
     private List<Cocktail> cocktails;
 
-    public Carte() {}
+    public Carte() {
+    }
 
-    public Carte(String nom, LocalDateTime dateCreation, Client barmaker, List<Cocktail> cocktails) {
+    public Carte(String nom, String description, String image, LocalDateTime dateCreation, Client barmaker,
+            List<Cocktail> cocktails) {
         this.nom = nom;
+        this.description = description;
+        this.image = image;
         this.dateCreation = dateCreation;
         this.barmaker = barmaker;
         this.cocktails = cocktails;
     }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getNom() { return nom; }
-    public void setNom(String nom) { this.nom = nom; }
-    public LocalDateTime getDateCreation() { return dateCreation; }
-    public void setDateCreation(LocalDateTime dateCreation) { this.dateCreation = dateCreation; }
-    public Client getBarmaker() { return barmaker; }
-    public void setBarmaker(Client barmaker) { this.barmaker = barmaker; }
-    public List<Cocktail> getCocktails() { return cocktails; }
-    public void setCocktails(List<Cocktail> cocktails) { this.cocktails = cocktails; }
-} 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public LocalDateTime getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(LocalDateTime dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+    public Client getBarmaker() {
+        return barmaker;
+    }
+
+    public void setBarmaker(Client barmaker) {
+        this.barmaker = barmaker;
+    }
+
+    public List<Cocktail> getCocktails() {
+        return cocktails;
+    }
+
+    public void setCocktails(List<Cocktail> cocktails) {
+        this.cocktails = cocktails;
+    }
+}

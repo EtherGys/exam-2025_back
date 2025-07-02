@@ -101,4 +101,10 @@ psql -U postgres -d cocktail_db
 
 # Quitter psql
 \q
+```
+
+## Migration SQL
+
+```sql
+ALTER TABLE cocktails ADD COLUMN image VARCHAR(255);
 ``` 

@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +23,11 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/cocktails")
-@CrossOrigin(origins = "*")
 public class CocktailController {
-    
+
     @Autowired
     private CocktailService cocktailService;
-    
+
     /**
      * GET /api/cocktails - Récupère tous les cocktails
      */
@@ -38,7 +36,7 @@ public class CocktailController {
         List<Cocktail> cocktails = cocktailService.getAllCocktails();
         return ResponseEntity.ok(cocktails);
     }
-    
+
     /**
      * GET /api/cocktails/{id} - Récupère un cocktail par son ID
      */
@@ -48,11 +46,11 @@ public class CocktailController {
         return cocktail.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-    
+
     /**
      * POST /api/cocktails - Crée un nouveau cocktail
      */
-    @PostMapping(consumes = {"application/json", "application/json;charset=UTF-8"})
+    @PostMapping(consumes = { "application/json", "application/json;charset=UTF-8" })
     public ResponseEntity<?> createCocktail(@Valid @RequestBody Cocktail cocktail) {
         try {
             Cocktail createdCocktail = cocktailService.createCocktail(cocktail);
@@ -61,7 +59,7 @@ public class CocktailController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    
+
     /**
      * PUT /api/cocktails/{id} - Met à jour un cocktail existant
      */
@@ -74,7 +72,7 @@ public class CocktailController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    
+
     /**
      * DELETE /api/cocktails/{id} - Supprime un cocktail
      */
@@ -87,7 +85,7 @@ public class CocktailController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    
+
     /**
      * GET /api/cocktails/search/nom/{nom} - Recherche des cocktails par nom
      */
@@ -96,7 +94,7 @@ public class CocktailController {
         List<Cocktail> cocktails = cocktailService.searchCocktailsByNom(nom);
         return ResponseEntity.ok(cocktails);
     }
-    
+
     /**
      * GET /api/cocktails/exists/{id} - Vérifie si un cocktail existe
      */
@@ -105,4 +103,4 @@ public class CocktailController {
         boolean exists = cocktailService.cocktailExists(id);
         return ResponseEntity.ok(exists);
     }
-} 
+}

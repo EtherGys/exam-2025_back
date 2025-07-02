@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +21,6 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api/cartes")
-@CrossOrigin(origins = "*")
 public class CarteController {
     @Autowired
     private CarteService carteService;
@@ -46,7 +44,12 @@ public class CarteController {
     @PostMapping
     public ResponseEntity<Carte> createCarte(@RequestBody CarteRequest request, HttpServletRequest httpRequest) {
         Long barmakerId = (Long) httpRequest.getAttribute("userId");
-        Carte carte = carteService.createCarte(request.getNom(), barmakerId, request.getCocktailIds());
+        Carte carte = carteService.createCarte(
+                request.getNom(),
+                request.getDescription(),
+                request.getImage(),
+                barmakerId,
+                request.getCocktailIds());
         return ResponseEntity.status(HttpStatus.CREATED).body(carte);
     }
 
@@ -58,10 +61,40 @@ public class CarteController {
 
     public static class CarteRequest {
         private String nom;
+        private String description;
+        private String image;
         private java.util.List<Long> cocktailIds;
-        public String getNom() { return nom; }
-        public void setNom(String nom) { this.nom = nom; }
-        public java.util.List<Long> getCocktailIds() { return cocktailIds; }
-        public void setCocktailIds(java.util.List<Long> cocktailIds) { this.cocktailIds = cocktailIds; }
+
+        public String getNom() {
+            return nom;
+        }
+
+        public void setNom(String nom) {
+            this.nom = nom;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+
+        public java.util.List<Long> getCocktailIds() {
+            return cocktailIds;
+        }
+
+        public void setCocktailIds(java.util.List<Long> cocktailIds) {
+            this.cocktailIds = cocktailIds;
+        }
     }
-} 
+}
