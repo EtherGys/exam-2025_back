@@ -164,4 +164,30 @@ public class CommandeService {
     public List<LigneDeCommande> getLignesNonTermineesByBarmaker(Long barmakerId) {
         return ligneDeCommandeRepository.findNonTermineesByBarmakerId(barmakerId);
     }
+
+    public LigneDeCommande updateStatutLigneDeCommande(Long ligneId, StatutCocktail nouveauStatut) {
+        LigneDeCommande ldc = ligneDeCommandeRepository.findById(ligneId)
+            .orElseThrow(() -> new RuntimeException("Ligne de commande non trouvée"));
+        ldc.setStatutCocktail(nouveauStatut);
+        ligneDeCommandeRepository.save(ldc);
+
+        Commande commande = ldc.getCommande();
+
+        // Si le statut est > COMMANDE mais != TERMINE, passer la commande à EN_PREPARATION
+        if (nouveauStatut != StatutCocktail.COMMANDE && nouveauStatut != StatutCocktail.TERMINE) {
+            commande.setStatutCommande(StatutCommande.EN_PREPARATION);
+            commandeRepository.save(commande);
+        }
+
+        // Si le statut est TERMINE, vérifier les autres lignes
+        if (nouveauStatut == StatutCocktail.TERMINE) {
+            boolean toutesTerminees = commande.getLignesDeCommande().stream()
+                .allMatch(l -> l.getStatutCocktail() == StatutCocktail.TERMINE);
+            if (toutesTerminees) {
+                commande.setStatutCommande(StatutCommande.TERMINEE);
+                commandeRepository.save(commande);
+            }
+        }
+        return ldc;
+    }
 } 
