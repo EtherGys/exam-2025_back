@@ -91,6 +91,13 @@ class CarteServiceTest {
     }
 
     @Test
+    void createCarte_barmakerNotFound() {
+        when(clientRepository.findById(99L)).thenReturn(Optional.empty());
+        assertThrows(RuntimeException.class, () ->
+            carteService.createCarte("nom", "desc", "img", 99L, List.of(1L)));
+    }
+
+    @Test
     void updateCarte_success() {
         Carte carte = new Carte();
         carte.setNom("old");
@@ -116,5 +123,19 @@ class CarteServiceTest {
         when(carteRepository.existsByNomAndBarmakerId("new", 1L)).thenReturn(true);
         assertThrows(CarteAlreadyExistsException.class, () ->
             carteService.updateCarte(1L, "new", List.of(1L)));
+    }
+
+    @Test
+    void updateCarte_notFound() {
+        when(carteRepository.findById(99L)).thenReturn(Optional.empty());
+        assertThrows(RuntimeException.class, () ->
+            carteService.updateCarte(99L, "nom", List.of(1L)));
+    }
+
+    @Test
+    void deleteCarte_notFound() {
+        // On ne lève pas d'exception par défaut avec deleteById, mais on peut vérifier que l'appel ne plante pas
+        doNothing().when(carteRepository).deleteById(99L);
+        assertDoesNotThrow(() -> carteService.deleteCarte(99L));
     }
 } 

@@ -53,6 +53,14 @@ class ClientServiceTest {
     }
 
     @Test
+    void createClient_emailExists() {
+        Client client = new Client();
+        client.setEmail("a@b.com");
+        when(clientRepository.existsByEmail("a@b.com")).thenReturn(true);
+        assertThrows(RuntimeException.class, () -> clientService.createClient(client));
+    }
+
+    @Test
     void authenticateClient_success() {
         Client client = new Client();
         client.setEmail("a@b.com");
@@ -112,6 +120,23 @@ class ClientServiceTest {
     }
 
     @Test
+    void updateClient_passwordNotEncoded() {
+        Client existing = new Client();
+        existing.setId(1L);
+        existing.setEmail("a@b.com");
+        Client update = new Client();
+        update.setEmail("a@b.com");
+        update.setMotDePasse("plain");
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(existing));
+        when(clientRepository.existsByEmail("a@b.com")).thenReturn(false);
+        when(passwordService.isEncoded("plain")).thenReturn(false);
+        when(passwordService.encodePassword("plain")).thenReturn("encoded");
+        when(clientRepository.save(any())).thenReturn(existing);
+        Client result = clientService.updateClient(1L, update);
+        assertEquals("encoded", result.getMotDePasse());
+    }
+
+    @Test
     void deleteClient_success() {
         Client client = new Client();
         when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
@@ -122,5 +147,26 @@ class ClientServiceTest {
     void deleteClient_notFound() {
         when(clientRepository.findById(2L)).thenReturn(Optional.empty());
         assertThrows(RuntimeException.class, () -> clientService.deleteClient(2L));
+    }
+
+    @Test
+    void searchClientsByNom_returnsList() {
+        List<Client> clients = List.of(new Client());
+        when(clientRepository.findByNomContainingIgnoreCase("Dupont")).thenReturn(clients);
+        assertEquals(clients, clientService.searchClientsByNom("Dupont"));
+    }
+
+    @Test
+    void searchClientsByPrenom_returnsList() {
+        List<Client> clients = List.of(new Client());
+        when(clientRepository.findByPrenomContainingIgnoreCase("Jean")).thenReturn(clients);
+        assertEquals(clients, clientService.searchClientsByPrenom("Jean"));
+    }
+
+    @Test
+    void authenticateClient_failure() {
+        when(clientRepository.findByEmail("a@b.com")).thenReturn(Optional.empty());
+        AuthResponse response = clientService.authenticateClient("a@b.com", "pw");
+        assertEquals("Email ou mot de passe incorrect", response.getMessage());
     }
 } 

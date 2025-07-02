@@ -145,4 +145,41 @@ class CommandeServiceTest {
         when(this.ligneDeCommandeRepository.findById(2L)).thenReturn(Optional.empty());
         assertThrows(RuntimeException.class, () -> commandeService.updateStatutLigneDeCommande(2L, StatutCocktail.PREPARATION_INGREDIENTS));
     }
+
+    @Test
+    void deleteCommande_notFound() {
+        when(commandeRepository.findById(99L)).thenReturn(Optional.empty());
+        assertThrows(RuntimeException.class, () -> commandeService.deleteCommande(99L));
+    }
+
+    @Test
+    void updateCommande_notFound() {
+        when(commandeRepository.findById(99L)).thenReturn(Optional.empty());
+        List<LigneDeCommandeItem> items = List.of();
+        assertThrows(RuntimeException.class, () -> commandeService.updateCommande(99L, 1L, items));
+    }
+
+    @Test
+    void createCommande_cocktailNotFound() {
+        Client client = new Client();
+        when(clientService.getClientById(1L)).thenReturn(Optional.of(client));
+        when(cocktailService.getCocktailById(anyLong())).thenReturn(Optional.empty());
+        LigneDeCommandeItem item = new LigneDeCommandeItem();
+        item.setCocktailId(1L); item.setTaille("S"); item.setPrixTaille(5.0); item.setQuantite(1);
+        List<LigneDeCommandeItem> items = List.of(item);
+        assertThrows(RuntimeException.class, () -> commandeService.createCommande(1L, items));
+    }
+
+    @Test
+    void updateCommande_cocktailNotFound() {
+        Commande commande = new Commande();
+        commande.setId(1L);
+        Client client = new Client();
+        client.setId(2L);
+        when(commandeRepository.findById(1L)).thenReturn(Optional.of(commande));
+        when(clientService.getClientById(2L)).thenReturn(Optional.of(client));
+        when(cocktailService.getCocktailById(anyLong())).thenReturn(Optional.empty());
+        List<LigneDeCommandeItem> items = List.of(new LigneDeCommandeItem());
+        assertThrows(RuntimeException.class, () -> commandeService.updateCommande(1L, 2L, items));
+    }
 } 
