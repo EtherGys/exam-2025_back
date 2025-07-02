@@ -2,6 +2,7 @@ package com.bar_app.entity;
 
 import java.util.List;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
@@ -10,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -50,8 +52,12 @@ public class Cocktail {
 
     @NotEmpty(message = "Le cocktail doit avoir au moins une catégorie")
     @ElementCollection
+    @CollectionTable(
+        name = "cocktail_categories",
+        joinColumns = @JoinColumn(name = "cocktail_id")
+    )
+    @Column(name = "categorie")
     @Enumerated(EnumType.STRING)
-    @Column(name = "categorie", nullable = false)
     private List<CocktailCategorie> categories;
 
     @Column(name = "image")

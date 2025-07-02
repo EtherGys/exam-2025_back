@@ -1,7 +1,5 @@
 package com.bar_app.controller;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,12 +13,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bar_app.entity.Commande;
 import com.bar_app.entity.LigneDeCommande;
 import com.bar_app.service.CommandeService;
+
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
@@ -96,17 +94,18 @@ public class CommandeController {
     }
 
     /**
-     * GET /api/commandes/client/{clientId} - Récupère toutes les commandes d'un
+     * GET /api/commandes/client - Récupère toutes les commandes d'un
      * client
      */
-    @GetMapping("/client/{clientId}")
-    public ResponseEntity<List<Commande>> getCommandesByClientId(@PathVariable Long clientId) {
+    @GetMapping("/client")
+    public ResponseEntity<List<Commande>> getCommandesByClientId(HttpServletRequest httpRequest) {
+          Long clientId = (Long) httpRequest.getAttribute("userId");
+        if (clientId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         List<Commande> commandes = commandeService.getCommandesByClientId(clientId);
         return ResponseEntity.ok(commandes);
     }
-
-  
-
 
 
     /**
@@ -119,11 +118,15 @@ public class CommandeController {
     }
 
     /**
-     * GET /api/commandes/barmaker/{barmakerId} - Récupère les lignes de commande
+     * GET /api/commandes/barmaker - Récupère les lignes de commande
      * non terminées d'un barmaker
      */
-    @GetMapping("/barmaker/{barmakerId}")
-    public ResponseEntity<List<LigneDeCommande>> getLignesNonTermineesByBarmaker(@PathVariable Long barmakerId) {
+    @GetMapping("/barmaker")
+    public ResponseEntity<List<LigneDeCommande>> getLignesNonTermineesByBarmaker(HttpServletRequest httpRequest) {
+         Long barmakerId = (Long) httpRequest.getAttribute("userId");
+        if (barmakerId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         List<LigneDeCommande> lignes = commandeService.getLignesNonTermineesByBarmaker(barmakerId);
         return ResponseEntity.ok(lignes);
     }

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bar_app.dto.CocktailRequest;
 import com.bar_app.entity.Cocktail;
 import com.bar_app.service.CocktailService;
 
@@ -51,9 +51,9 @@ public class CocktailController {
      * POST /api/cocktails - Crée un nouveau cocktail
      */
     @PostMapping(consumes = { "application/json", "application/json;charset=UTF-8" })
-    public ResponseEntity<?> createCocktail(@Valid @RequestBody Cocktail cocktail) {
+    public ResponseEntity<?> createCocktail(@Valid @RequestBody CocktailRequest request) {
         try {
-            Cocktail createdCocktail = cocktailService.createCocktail(cocktail);
+            Cocktail createdCocktail = cocktailService.createCocktailAndAddToCarte(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdCocktail);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

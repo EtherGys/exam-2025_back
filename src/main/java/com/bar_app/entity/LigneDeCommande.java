@@ -45,6 +45,9 @@ public class LigneDeCommande {
     @Column(name = "statut_cocktail", nullable = false)
     private StatutCocktail statutCocktail = StatutCocktail.COMMANDE;
 
+    @Column(name = "nom_cocktail", nullable = false)
+    private String nomCocktail;
+
     public LigneDeCommande() {
     }
 
@@ -114,6 +117,14 @@ public class LigneDeCommande {
         this.statutCocktail = statutCocktail;
     }
 
+    public String getNomCocktail() {
+        return nomCocktail;
+    }
+
+    public void setNomCocktail(String nomCocktail) {
+        this.nomCocktail = nomCocktail;
+    }
+
     @Override
     public String toString() {
         return "LigneDeCommande{" +
@@ -124,6 +135,7 @@ public class LigneDeCommande {
                 ", prixTaille=" + prixTaille +
                 ", quantite=" + quantite +
                 ", statutCocktail=" + statutCocktail +
+                ", nomCocktail=" + nomCocktail +
                 '}';
     }
 }

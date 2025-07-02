@@ -1,6 +1,5 @@
 package com.bar_app.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,8 +45,10 @@ public class CarteService {
             throw new CarteAlreadyExistsException(nom, barmakerId);
         }
 
-        List<Cocktail> cocktails = cocktailRepository.findAllById(cocktailIds);
-        Carte carte = new Carte(nom, description, image, LocalDateTime.now(), barmaker, cocktails);
+        List<Cocktail> cocktails = (cocktailIds == null || cocktailIds.isEmpty())
+            ? new java.util.ArrayList<>()
+            : cocktailRepository.findAllById(cocktailIds);
+        Carte carte = new Carte(nom, description, image, java.time.LocalDateTime.now(), barmaker, cocktails);
         return carteRepository.save(carte);
     }
 

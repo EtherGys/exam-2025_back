@@ -2,17 +2,25 @@ package com.bar_app.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bar_app.dto.CocktailRequest;
+import com.bar_app.entity.Carte;
 import com.bar_app.entity.Cocktail;
+import com.bar_app.entity.CocktailCategorie;
+import com.bar_app.repository.CarteRepository;
 import com.bar_app.repository.CocktailRepository;
 
 @Service
 public class CocktailService {
     @Autowired
     private CocktailRepository cocktailRepository;
+
+    @Autowired
+    private CarteRepository carteRepository;
 
     /**
      * Récupère tous les cocktails
@@ -33,6 +41,7 @@ public class CocktailService {
      */
     public Cocktail createCocktail(Cocktail cocktail) {
         return cocktailRepository.save(cocktail);
+        
     }
 
     /**
@@ -73,5 +82,34 @@ public class CocktailService {
      */
     public boolean cocktailExists(Long id) {
         return cocktailRepository.existsById(id);
+    }
+
+    public Cocktail createCocktailAndAddToCarte(CocktailRequest request) {
+        Cocktail cocktail = new Cocktail();
+        cocktail.setNom(request.getNom());
+        cocktail.setIngredients(request.getIngredients());
+        cocktail.setPrixS(request.getPrixS());
+        cocktail.setPrixM(request.getPrixM());
+        cocktail.setPrixL(request.getPrixL());
+        cocktail.setCategories(
+            request.getCategories().stream()
+                .map(String::toUpperCase)
+                .map(CocktailCategorie::valueOf)
+                .collect(Collectors.toList())
+        );
+        cocktail.setImage(request.getImage());
+        cocktail.setDescription(request.getDescription());
+
+        Cocktail savedCocktail = cocktailRepository.save(cocktail);
+
+        if (request.getCarteId() != null) {
+            Carte carte = carteRepository.findById(request.getCarteId())
+                .orElseThrow(() -> new RuntimeException("Carte non trouvée"));
+            List<Cocktail> cocktails = carte.getCocktails();
+            cocktails.add(savedCocktail);
+            carte.setCocktails(cocktails);
+            carteRepository.save(carte);
+        }
+        return savedCocktail;
     }
 }

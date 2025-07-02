@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bar_app.entity.Carte;
 import com.bar_app.service.CarteService;
+import com.bar_app.service.JwtService;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -24,6 +25,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class CarteController {
     @Autowired
     private CarteService carteService;
+
+    @Autowired
+    private JwtService jwtService;
 
     @GetMapping
     public ResponseEntity<List<Carte>> getAllCartes() {
@@ -36,21 +40,35 @@ public class CarteController {
         return carte.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/barmaker/{barmakerId}")
-    public ResponseEntity<List<Carte>> getCartesByBarmaker(@PathVariable Long barmakerId) {
+    @GetMapping("/barmaker")
+    public ResponseEntity<List<Carte>> getCartesByBarmaker(HttpServletRequest httpRequest) {
+            Long barmakerId = (Long) httpRequest.getAttribute("userId");
+        if (barmakerId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         return ResponseEntity.ok(carteService.getCartesByBarmakerId(barmakerId));
     }
 
     @PostMapping
-    public ResponseEntity<Carte> createCarte(@RequestBody CarteRequest request, HttpServletRequest httpRequest) {
-        Long barmakerId = (Long) httpRequest.getAttribute("userId");
-        Carte carte = carteService.createCarte(
+    public ResponseEntity<?> createCarte(@RequestBody CarteRequest request, HttpServletRequest httpRequest) {
+        try {
+            String authHeader = httpRequest.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token manquant");
+            }
+            String token = authHeader.substring(7);
+            Long barmakerId = jwtService.extractUserId(token);
+            Carte carte = carteService.createCarte(
                 request.getNom(),
                 request.getDescription(),
                 request.getImage(),
                 barmakerId,
-                request.getCocktailIds());
-        return ResponseEntity.status(HttpStatus.CREATED).body(carte);
+                request.getCocktailIds()
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body(carte);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

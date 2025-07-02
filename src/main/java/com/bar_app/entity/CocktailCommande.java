@@ -31,6 +31,9 @@ public class CocktailCommande {
     @Column(name = "etat_avancement", nullable = false)
     private EtatAvancementCocktail etatAvancement = EtatAvancementCocktail.PREPARATION_INGREDIENTS;
 
+    @Column(name = "nom_cocktail", nullable = false)
+    private String nomCocktail;
+
     public CocktailCommande() {}
 
     public CocktailCommande(Cocktail cocktail, Commande commande, EtatAvancementCocktail etatAvancement) {
@@ -47,6 +50,8 @@ public class CocktailCommande {
     public void setCommande(Commande commande) { this.commande = commande; }
     public EtatAvancementCocktail getEtatAvancement() { return etatAvancement; }
     public void setEtatAvancement(EtatAvancementCocktail etatAvancement) { this.etatAvancement = etatAvancement; }
+    public String getNomCocktail() { return nomCocktail; }
+    public void setNomCocktail(String nomCocktail) { this.nomCocktail = nomCocktail; }
 
     @Override
     public String toString() {

@@ -70,6 +70,7 @@ public class CommandeService {
             LigneDeCommande ldc = new LigneDeCommande();
             ldc.setCommande(commande);
             ldc.setCocktail(cocktail);
+            ldc.setNomCocktail(cocktail.getNom());
             ldc.setTaille(taille);
             ldc.setPrixTaille(item.getPrixTaille());
             ldc.setQuantite(item.getQuantite());
@@ -102,6 +103,7 @@ public class CommandeService {
             LigneDeCommande ldc = new LigneDeCommande();
             ldc.setCommande(commande);
             ldc.setCocktail(cocktail);
+            ldc.setNomCocktail(cocktail.getNom());
             ldc.setTaille(taille);
             ldc.setPrixTaille(item.getPrixTaille());
             ldc.setQuantite(item.getQuantite());
