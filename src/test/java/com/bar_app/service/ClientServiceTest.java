@@ -3,7 +3,9 @@ package com.bar_app.service;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,9 +19,6 @@ import com.bar_app.dto.AuthResponse;
 import com.bar_app.entity.Client;
 import com.bar_app.entity.Role;
 import com.bar_app.repository.ClientRepository;
-import com.bar_app.service.ClientService;
-import com.bar_app.service.JwtService;
-import com.bar_app.service.PasswordService;
 
 class ClientServiceTest {
     @Mock
@@ -70,5 +69,58 @@ class ClientServiceTest {
     void clientExists_true() {
         when(clientRepository.existsById(1L)).thenReturn(true);
         assertTrue(clientService.clientExists(1L));
+    }
+
+    @Test
+    void getClientById_found() {
+        Client client = new Client();
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+        assertEquals(Optional.of(client), clientService.getClientById(1L));
+    }
+
+    @Test
+    void getClientById_notFound() {
+        when(clientRepository.findById(2L)).thenReturn(Optional.empty());
+        assertEquals(Optional.empty(), clientService.getClientById(2L));
+    }
+
+    @Test
+    void updateClient_success() {
+        Client existing = new Client();
+        existing.setId(1L);
+        existing.setEmail("a@b.com");
+        Client update = new Client();
+        update.setEmail("a@b.com");
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(existing));
+        when(clientRepository.existsByEmail("a@b.com")).thenReturn(false);
+        when(passwordService.isEncoded(any())).thenReturn(true);
+        when(clientRepository.save(any())).thenReturn(existing);
+        Client result = clientService.updateClient(1L, update);
+        assertEquals("a@b.com", result.getEmail());
+    }
+
+    @Test
+    void updateClient_emailExists() {
+        Client existing = new Client();
+        existing.setId(1L);
+        existing.setEmail("a@b.com");
+        Client update = new Client();
+        update.setEmail("other@b.com");
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(existing));
+        when(clientRepository.existsByEmail("other@b.com")).thenReturn(true);
+        assertThrows(RuntimeException.class, () -> clientService.updateClient(1L, update));
+    }
+
+    @Test
+    void deleteClient_success() {
+        Client client = new Client();
+        when(clientRepository.findById(1L)).thenReturn(Optional.of(client));
+        assertDoesNotThrow(() -> clientService.deleteClient(1L));
+    }
+
+    @Test
+    void deleteClient_notFound() {
+        when(clientRepository.findById(2L)).thenReturn(Optional.empty());
+        assertThrows(RuntimeException.class, () -> clientService.deleteClient(2L));
     }
 } 
