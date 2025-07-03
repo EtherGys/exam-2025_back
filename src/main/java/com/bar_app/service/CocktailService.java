@@ -67,6 +67,14 @@ public class CocktailService {
     public void deleteCocktail(Long id) {
         Cocktail cocktail = cocktailRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cocktail non trouvé avec l'ID: " + id));
+        // Retirer le cocktail de toutes les cartes qui le contiennent
+        List<Carte> cartes = carteRepository.findAll();
+        for (Carte carte : cartes) {
+            if (carte.getCocktails().removeIf(c -> c.getId().equals(id))) {
+                carteRepository.save(carte);
+            }
+        }
+        // Maintenant, supprimer le cocktail
         cocktailRepository.delete(cocktail);
     }
 
